@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardViewRepoItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="60dp"
+    android:layout_margin="8dp"
+    android:background="@drawable/bg_search_bar"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/textViewRepoTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Repository name"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:padding="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewRepoDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Repository name"
+            android:textSize="16sp"
+            android:textColor="@color/gray"
+            android:padding="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewRepoLanguages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Repository name"
+            android:textSize="16sp"
+            android:textColor="@android:color/holo_orange_light"
+            android:textStyle="bold"
+            android:padding="8dp"/>
+    </LinearLayout>
+    
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="top"
+    tools:context=".presentation.SearchRepos.SearchRepositoriesActivity">
+
+    <SearchView
+        android:id="@+id/searchViewUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="60dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:queryHint="@string/input_username"
+        android:background="@drawable/bg_search_bar"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRepositories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/buttonGoDownloads"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textStyle="bold"
+        android:text="@string/go_downloads" />
+
+</LinearLayout>
