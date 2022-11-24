@@ -2,4 +2,6 @@
     <string name="app_name">GitHubClient</string>
     <string name="input_username">Введите имя пользователя...</string>
     <string name="go_downloads">Перейти в загрузки</string>
+    <string name="miss_description">Описание отсутствует :(</string>
+    <string name="download">Скачать</string>
 </resources>

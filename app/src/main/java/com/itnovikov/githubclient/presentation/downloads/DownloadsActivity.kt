@@ -1,10 +1,9 @@
-package com.itnovikov.githubclient.presentation.Downloads
+package com.itnovikov.githubclient.presentation.downloads
 
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.itnovikov.githubclient.R
 import com.itnovikov.githubclient.databinding.ActivityDownloadsBinding
 
 class DownloadsActivity : AppCompatActivity() {

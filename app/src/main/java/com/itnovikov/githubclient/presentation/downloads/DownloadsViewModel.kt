@@ -1,4 +1,4 @@
-package com.itnovikov.githubclient.presentation.Downloads
+package com.itnovikov.githubclient.presentation.downloads
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

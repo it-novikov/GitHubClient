@@ -1,4 +1,4 @@
-package com.itnovikov.githubclient.presentation.SearchRepos
+package com.itnovikov.githubclient.presentation.search
 
 import android.view.View
 import android.widget.TextView

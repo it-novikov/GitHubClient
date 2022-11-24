@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cardViewRepoItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="60dp"
-    android:layout_margin="8dp"
-    android:background="@drawable/bg_search_bar"
-    android:elevation="4dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical"
+    android:gravity="top"
+    android:background="@drawable/bg_repo_item">
 
         <TextView
             android:id="@+id/textViewRepoTitle"
@@ -23,16 +17,16 @@
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="@color/black"
-            android:padding="8dp"/>
+            android:padding="8dp" />
 
         <TextView
             android:id="@+id/textViewRepoDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Repository name"
+            android:text="@string/miss_description"
             android:textSize="16sp"
-            android:textColor="@color/gray"
-            android:padding="8dp"/>
+            android:textColor="@color/black"
+            android:padding="8dp" />
 
         <TextView
             android:id="@+id/textViewRepoLanguages"
@@ -40,9 +34,18 @@
             android:layout_height="wrap_content"
             tools:text="Repository name"
             android:textSize="16sp"
-            android:textColor="@android:color/holo_orange_light"
+            android:textColor="@android:color/holo_orange_dark"
             android:textStyle="bold"
-            android:padding="8dp"/>
-    </LinearLayout>
-    
-</androidx.cardview.widget.CardView>
+            android:padding="8dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_download_button_2"
+            android:layout_margin="8dp"
+            android:text="@string/download"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/white"/>
+
+</LinearLayout>
