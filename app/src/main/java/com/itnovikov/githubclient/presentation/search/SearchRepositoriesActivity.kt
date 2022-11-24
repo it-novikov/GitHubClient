@@ -1,16 +1,13 @@
 package com.itnovikov.githubclient.presentation.search
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.activity.viewModels
 import com.itnovikov.githubclient.core.BaseActivity
-import com.itnovikov.githubclient.data.remote.BASE_URL
+import com.itnovikov.githubclient.data.local.model.DownloadMapper
 import com.itnovikov.githubclient.databinding.ActivitySearchBinding
 import com.itnovikov.githubclient.presentation.downloads.DownloadsActivity
 
@@ -52,22 +49,25 @@ class SearchRepositoriesActivity : BaseActivity() {
         initCallbacks()
     }
 
-    @SuppressLint("NewApi")
     private fun initCallbacks() {
         adapter.setOnItemClick {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.htmlUrl)))
         }
 
         adapter.setOnItemButtonClick {
-            val url = it.url.toString() + "/archive/refs/heads/" +
-            Log.d("TAG", it.archiveUrl.toString())
-            Log.d("TAG", it.name.toString())
-            viewModel.saveRepo(this, it.url.toString(), it.name.toString())
+            val owner = it.owner?.login.toString()
+            val url = "https://github.com/" + owner + "/" + it.name +
+                    "/archive/refs/heads/" + it.defaultBranch.toString() + ".zip"
+            val download = DownloadMapper.mapRepoToDownload(it)
+            viewModel.saveRepo(this, url, it.name.toString())
+            viewModel.addDownload(download)
         }
     }
 
     private fun configureButton() {
-        binding.buttonGoDownloads.setOnClickListener { DownloadsActivity.newIntent(this) }
+        binding.buttonGoDownloads.setOnClickListener {
+            startActivity(DownloadsActivity.newIntent(this))
+        }
     }
 
     private fun observeViewModel() {

@@ -1,23 +1,16 @@
 package com.itnovikov.githubclient.presentation.search
 
-import android.content.ContentValues
-import android.content.Context
-import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.ListAdapter
 import com.itnovikov.githubclient.R
-import com.itnovikov.githubclient.data.model.ResponseModel
-import java.net.URL
+import com.itnovikov.githubclient.data.remote.model.Repository
 
 class SearchRepositoriesAdapter
-    : ListAdapter<ResponseModel, SearchRepositoriesViewHolder>(SearchRepositoriesDiffCallback()) {
+    : ListAdapter<Repository, SearchRepositoriesViewHolder>(SearchRepositoriesDiffCallback()) {
 
-    private var onItemClick: ((ResponseModel) -> Unit)? = null
-    private var onItemButtonClick: ((ResponseModel) -> Unit)? = null
+    private var onItemClick: ((Repository) -> Unit)? = null
+    private var onItemButtonClick: ((Repository) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchRepositoriesViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
@@ -43,11 +36,11 @@ class SearchRepositoriesAdapter
         }
     }
 
-    fun setOnItemClick(function: ((ResponseModel) -> Unit)?) {
+    fun setOnItemClick(function: ((Repository) -> Unit)?) {
         onItemClick = function
     }
 
-    fun setOnItemButtonClick(function: ((ResponseModel) -> Unit)?) {
+    fun setOnItemButtonClick(function: ((Repository) -> Unit)?) {
         onItemButtonClick = function
     }
 

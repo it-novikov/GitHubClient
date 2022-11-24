@@ -1,8 +1,8 @@
-package com.itnovikov.githubclient.data.model
+package com.itnovikov.githubclient.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ResponseModel(
+data class Repository(
 
 	@field:SerializedName("allow_forking")
 	val allowForking: Boolean? = null,

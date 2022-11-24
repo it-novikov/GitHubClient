@@ -2,33 +2,29 @@ package com.itnovikov.githubclient.presentation.search
 
 import android.app.Application
 import android.app.DownloadManager
-import android.content.ContentValues
 import android.content.Context
 import android.content.Context.DOWNLOAD_SERVICE
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
-import android.provider.MediaStore
-import androidx.annotation.RequiresApi
-import androidx.core.content.getSystemService
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.itnovikov.githubclient.data.model.ResponseModel
+import com.itnovikov.githubclient.data.local.AppDatabase
+import com.itnovikov.githubclient.data.local.model.Download
+import com.itnovikov.githubclient.data.remote.model.Repository
 import com.itnovikov.githubclient.data.remote.ApiFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
-import java.net.URL
 
 class SearchRepositoriesViewModel(application: Application): AndroidViewModel(application) {
 
-    private val isReady = MutableLiveData<Boolean>(false)
-    private val repositories = MutableLiveData<List<ResponseModel>>()
+    private val appDatabase by lazy { AppDatabase.getInstance(application).dao() }
 
-    fun getRepos(): LiveData<List<ResponseModel>> {
+    private val isReady = MutableLiveData(false)
+    private val repositories = MutableLiveData<List<Repository>>()
+
+    fun getRepos(): LiveData<List<Repository>> {
         return repositories
     }
 
@@ -55,7 +51,13 @@ class SearchRepositoriesViewModel(application: Application): AndroidViewModel(ap
         request.setAllowedOverMetered(true)
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
-        val downloadManager: DownloadManager = context.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+        val downloadManager = context.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadManager.enqueue(request)
+    }
+
+    fun addDownload(download: Download) {
+        viewModelScope.launch {
+            appDatabase.add(download)
+        }
     }
 }
