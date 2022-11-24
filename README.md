@@ -7,6 +7,6 @@
 Используемый стек технологий:
 - Kotlin
 - Room Database
-– Kotlin Coroutines
-– Retrofit2 with Gson converter
+- Kotlin Coroutines
+- Retrofit2 with Gson converter
 - MVVM with LiveData
