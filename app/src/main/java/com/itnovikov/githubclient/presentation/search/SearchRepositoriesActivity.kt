@@ -1,10 +1,16 @@
 package com.itnovikov.githubclient.presentation.search
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.activity.viewModels
 import com.itnovikov.githubclient.core.BaseActivity
+import com.itnovikov.githubclient.data.remote.BASE_URL
 import com.itnovikov.githubclient.databinding.ActivitySearchBinding
 import com.itnovikov.githubclient.presentation.downloads.DownloadsActivity
 
@@ -43,6 +49,21 @@ class SearchRepositoriesActivity : BaseActivity() {
 
     private fun initRV() {
         binding.rvRepositories.adapter = adapter
+        initCallbacks()
+    }
+
+    @SuppressLint("NewApi")
+    private fun initCallbacks() {
+        adapter.setOnItemClick {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.htmlUrl)))
+        }
+
+        adapter.setOnItemButtonClick {
+            val url = it.url.toString() + "/archive/refs/heads/" +
+            Log.d("TAG", it.archiveUrl.toString())
+            Log.d("TAG", it.name.toString())
+            viewModel.saveRepo(this, it.url.toString(), it.name.toString())
+        }
     }
 
     private fun configureButton() {
