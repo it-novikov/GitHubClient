@@ -10,3 +10,7 @@
 - Kotlin Coroutines
 - Retrofit2 with Gson converter
 - MVVM with LiveData
+
+<img width="469" alt="1" src="https://user-images.githubusercontent.com/101038435/203864439-53d71be0-cf41-435d-89fe-2e4edf7a4361.png">
+<img width="469" alt="2" src="https://user-images.githubusercontent.com/101038435/203864448-01fe3a81-6209-4d95-9f98-9321a3f88eba.png">
+<img width="469" alt="3" src="https://user-images.githubusercontent.com/101038435/203864451-00d381df-71cf-4267-882b-277e8a435571.png">
