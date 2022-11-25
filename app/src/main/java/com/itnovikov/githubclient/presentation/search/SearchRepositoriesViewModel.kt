@@ -15,6 +15,7 @@ import com.itnovikov.githubclient.data.remote.model.Repo
 import com.itnovikov.githubclient.data.repository.RepositoryImpl
 import com.itnovikov.githubclient.domain.AddDownloadUseCase
 import com.itnovikov.githubclient.domain.LoadReposUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SearchRepositoriesViewModel(application: Application): AndroidViewModel(application) {
@@ -35,7 +36,7 @@ class SearchRepositoriesViewModel(application: Application): AndroidViewModel(ap
     }
 
     fun loadRepositories(username: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = loadReposUseCase.loadRepos(username) ?: return@launch
                 repositories.postValue(response)
@@ -46,7 +47,7 @@ class SearchRepositoriesViewModel(application: Application): AndroidViewModel(ap
         }
     }
 
-    fun saveRepo(context: Context, url: String, fileName: String) {
+    private fun saveRepo(context: Context, url: String, fileName: String) {
         val request = DownloadManager.Request(Uri.parse(url))
         request.setTitle(fileName)
         request.setMimeType("application/zip")
@@ -55,6 +56,13 @@ class SearchRepositoriesViewModel(application: Application): AndroidViewModel(ap
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
         val downloadManager = context.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadManager.enqueue(request)
+    }
+
+    fun createUrl(context: Context, repo: Repo) {
+        val owner = repo.owner?.login.toString()
+        val url = "https://github.com/" + owner + "/" + repo.name +
+                "/archive/refs/heads/" + repo.defaultBranch.toString() + ".zip"
+        saveRepo(context, url, repo.name.toString())
     }
 
     fun addDownload(download: Download) {

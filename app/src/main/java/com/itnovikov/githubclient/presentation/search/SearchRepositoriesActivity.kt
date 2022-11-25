@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.activity.viewModels
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.itnovikov.githubclient.core.BaseActivity
 import com.itnovikov.githubclient.data.local.model.DownloadMapper
 import com.itnovikov.githubclient.databinding.ActivitySearchBinding
@@ -20,6 +21,7 @@ class SearchRepositoriesActivity : BaseActivity() {
     private var isReady = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         loadData()
@@ -55,11 +57,8 @@ class SearchRepositoriesActivity : BaseActivity() {
         }
 
         adapter.setOnItemButtonClick {
-            val owner = it.owner?.login.toString()
-            val url = "https://github.com/" + owner + "/" + it.name +
-                    "/archive/refs/heads/" + it.defaultBranch.toString() + ".zip"
+            viewModel.createUrl(this, it)
             val download = DownloadMapper.mapRepoToDownload(it)
-            viewModel.saveRepo(this, url, it.name.toString())
             viewModel.addDownload(download)
         }
     }
