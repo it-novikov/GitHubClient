@@ -4,6 +4,8 @@ import android.app.Application
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Context.DOWNLOAD_SERVICE
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Environment
 import androidx.lifecycle.AndroidViewModel
@@ -16,6 +18,7 @@ import com.itnovikov.githubclient.data.repository.RepositoryImpl
 import com.itnovikov.githubclient.domain.AddDownloadUseCase
 import com.itnovikov.githubclient.domain.LoadReposUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SearchRepositoriesViewModel(application: Application): AndroidViewModel(application) {
@@ -26,6 +29,7 @@ class SearchRepositoriesViewModel(application: Application): AndroidViewModel(ap
 
     private val isReady = MutableLiveData(false)
     private val repositories = MutableLiveData<List<Repo>>()
+    private val error = MutableLiveData<String>()
 
     fun getRepos(): LiveData<List<Repo>> {
         return repositories
@@ -35,16 +39,45 @@ class SearchRepositoriesViewModel(application: Application): AndroidViewModel(ap
         return isReady
     }
 
-    fun loadRepositories(username: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = loadReposUseCase.loadRepos(username) ?: return@launch
-                repositories.postValue(response)
+    fun getError(): LiveData<String> {
+        return error
+    }
+
+    fun loadRepositories(context: Context, username: String) {
+        if (isOnline(context)) {
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    val response = loadReposUseCase.loadRepos(username) ?: return@launch
+                    repositories.postValue(response)
+                    isReady.postValue(true)
+                } catch (e: Exception) {
+                    error.postValue(e.toString())
+                }
+            }
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                delay(2000)
                 isReady.postValue(true)
-            } catch (e: Exception) {
-                e.stackTrace
+                error.postValue("No internet connection")
             }
         }
+    }
+
+    private fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities != null) {
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                return true
+            }
+        }
+        return false
     }
 
     private fun saveRepo(context: Context, url: String, fileName: String) {

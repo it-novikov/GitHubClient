@@ -1,5 +1,6 @@
 package com.itnovikov.githubclient.presentation.search
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.google.android.material.snackbar.Snackbar
 import com.itnovikov.githubclient.core.BaseActivity
 import com.itnovikov.githubclient.data.local.model.DownloadMapper
 import com.itnovikov.githubclient.databinding.ActivitySearchBinding
@@ -26,10 +28,10 @@ class SearchRepositoriesActivity : BaseActivity() {
         setContentView(binding.root)
         loadData()
         initRV()
-        viewModel.loadRepositories("it-novikov")
+        viewModel.loadRepositories(this,"it-novikov")
         observeViewModel()
         configureButton()
-        setSearchView()
+        setSearchView(this)
     }
 
     private fun loadData() {
@@ -77,16 +79,20 @@ class SearchRepositoriesActivity : BaseActivity() {
         viewModel.getReady().observe(this) {
             isReady = it
         }
+
+        viewModel.getError().observe(this) {
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
+        }
     }
 
-    private fun setSearchView() {
+    private fun setSearchView(context: Context) {
         binding.searchViewUsers.clearFocus()
         binding.searchViewUsers.setOnQueryTextListener(object :
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 binding.searchViewUsers.clearFocus()
                 val username = binding.searchViewUsers.query.toString()
-                viewModel.loadRepositories(username)
+                viewModel.loadRepositories(context, username)
                 return true
             }
 
