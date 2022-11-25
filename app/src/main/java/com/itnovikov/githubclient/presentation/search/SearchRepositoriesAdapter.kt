@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.itnovikov.githubclient.R
-import com.itnovikov.githubclient.data.remote.model.Repository
+import com.itnovikov.githubclient.data.remote.model.Repo
 
 class SearchRepositoriesAdapter
-    : ListAdapter<Repository, SearchRepositoriesViewHolder>(SearchRepositoriesDiffCallback()) {
+    : ListAdapter<Repo, SearchRepositoriesViewHolder>(SearchRepositoriesDiffCallback()) {
 
-    private var onItemClick: ((Repository) -> Unit)? = null
-    private var onItemButtonClick: ((Repository) -> Unit)? = null
+    private var onItemClick: ((Repo) -> Unit)? = null
+    private var onItemButtonClick: ((Repo) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchRepositoriesViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
@@ -36,11 +36,11 @@ class SearchRepositoriesAdapter
         }
     }
 
-    fun setOnItemClick(function: ((Repository) -> Unit)?) {
+    fun setOnItemClick(function: ((Repo) -> Unit)?) {
         onItemClick = function
     }
 
-    fun setOnItemButtonClick(function: ((Repository) -> Unit)?) {
+    fun setOnItemButtonClick(function: ((Repo) -> Unit)?) {
         onItemButtonClick = function
     }
 

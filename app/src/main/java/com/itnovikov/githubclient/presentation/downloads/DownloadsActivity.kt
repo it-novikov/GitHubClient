@@ -18,7 +18,6 @@ class DownloadsActivity : BaseActivity() {
         setContentView(binding.root)
         initRV()
         updateRV()
-        setActionBar()
     }
 
     companion object {
@@ -35,9 +34,5 @@ class DownloadsActivity : BaseActivity() {
         viewModel.downloads.observe(this) {
             adapter.submitList(it)
         }
-    }
-
-    private fun setActionBar() {
-        actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 }

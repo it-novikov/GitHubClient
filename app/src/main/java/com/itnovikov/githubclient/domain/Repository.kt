@@ -1,17 +1,14 @@
-package com.itnovikov.githubclient.data.local
+package com.itnovikov.githubclient.domain
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
 import com.itnovikov.githubclient.data.local.model.Download
+import com.itnovikov.githubclient.data.remote.model.Repo
 
-@Dao
-interface Dao {
+interface Repository {
 
-    @Query("SELECT * FROM downloads")
     fun getDownloads(): LiveData<List<Download>>
 
-    @Insert
+    suspend fun loadRepos(username: String): List<Repo>?
+
     suspend fun addDownload(download: Download)
 }

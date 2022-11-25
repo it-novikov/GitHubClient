@@ -10,21 +10,23 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.itnovikov.githubclient.data.local.AppDatabase
 import com.itnovikov.githubclient.data.local.model.Download
-import com.itnovikov.githubclient.data.remote.model.Repository
-import com.itnovikov.githubclient.data.remote.ApiFactory
-import kotlinx.coroutines.Dispatchers
+import com.itnovikov.githubclient.data.remote.model.Repo
+import com.itnovikov.githubclient.data.repository.RepositoryImpl
+import com.itnovikov.githubclient.domain.AddDownloadUseCase
+import com.itnovikov.githubclient.domain.LoadReposUseCase
 import kotlinx.coroutines.launch
 
 class SearchRepositoriesViewModel(application: Application): AndroidViewModel(application) {
 
-    private val appDatabase by lazy { AppDatabase.getInstance(application).dao() }
+    private val repository = RepositoryImpl(application)
+    private val addDownloadsUseCase = AddDownloadUseCase(repository)
+    private val loadReposUseCase = LoadReposUseCase(repository)
 
     private val isReady = MutableLiveData(false)
-    private val repositories = MutableLiveData<List<Repository>>()
+    private val repositories = MutableLiveData<List<Repo>>()
 
-    fun getRepos(): LiveData<List<Repository>> {
+    fun getRepos(): LiveData<List<Repo>> {
         return repositories
     }
 
@@ -33,10 +35,10 @@ class SearchRepositoriesViewModel(application: Application): AndroidViewModel(ap
     }
 
     fun loadRepositories(username: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
-                val response = ApiFactory.apiService.loadRepositories(username)
-                repositories.postValue(response.body())
+                val response = loadReposUseCase.loadRepos(username) ?: return@launch
+                repositories.postValue(response)
                 isReady.postValue(true)
             } catch (e: Exception) {
                 e.stackTrace
@@ -57,7 +59,7 @@ class SearchRepositoriesViewModel(application: Application): AndroidViewModel(ap
 
     fun addDownload(download: Download) {
         viewModelScope.launch {
-            appDatabase.add(download)
+            addDownloadsUseCase.addDownload(download)
         }
     }
 }
