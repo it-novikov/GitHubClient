@@ -7,6 +7,7 @@ import android.content.Context.DOWNLOAD_SERVICE
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
+import android.os.CountDownTimer
 import android.os.Environment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -31,6 +32,18 @@ class SearchRepositoriesViewModel(application: Application): AndroidViewModel(ap
     private val repositories = MutableLiveData<List<Repo>>()
     private val error = MutableLiveData<String>()
 
+    private val timer = object : CountDownTimer(3000, 1000) {
+        override fun onTick(p0: Long) {}
+
+        override fun onFinish() {
+            isReady.postValue(true)
+        }
+    }
+
+    init {
+        timer.start()
+    }
+
     fun getRepos(): LiveData<List<Repo>> {
         return repositories
     }
@@ -50,16 +63,20 @@ class SearchRepositoriesViewModel(application: Application): AndroidViewModel(ap
                     val response = loadReposUseCase.loadRepos(username) ?: return@launch
                     repositories.postValue(response)
                     isReady.postValue(true)
+                    timer.cancel()
                 } catch (e: Exception) {
+                    isReady.postValue(true)
                     error.postValue(e.toString())
+                    timer.cancel()
                 }
             }
         } else {
-            viewModelScope.launch(Dispatchers.IO) {
-                delay(2000)
-                isReady.postValue(true)
-                error.postValue("No internet connection")
-            }
+//            viewModelScope.launch(Dispatchers.IO) {
+//                delay(2000)
+//                isReady.postValue(true)
+//                error.postValue("No internet connection")
+//                timer.cancel()
+//            }
         }
     }
 
