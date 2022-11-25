@@ -71,12 +71,12 @@ class SearchRepositoriesViewModel(application: Application): AndroidViewModel(ap
                 }
             }
         } else {
-//            viewModelScope.launch(Dispatchers.IO) {
-//                delay(2000)
-//                isReady.postValue(true)
-//                error.postValue("No internet connection")
-//                timer.cancel()
-//            }
+            viewModelScope.launch(Dispatchers.IO) {
+                delay(2000)
+                isReady.postValue(true)
+                error.postValue("No internet connection")
+                timer.cancel()
+            }
         }
     }
 
